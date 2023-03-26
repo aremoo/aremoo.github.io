@@ -4,7 +4,7 @@
   "description": "starter project for lab3",
   "main": "index.js",
   "author": "Tom Tsiliopoulos",
-  “homepage” : “http://aremoo.github.io",
+  "homepage" : "http://aremoo.github.io/aremoo.github.io",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
