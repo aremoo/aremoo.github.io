@@ -9,7 +9,6 @@
             "task-list"
         ];
     
-    
         if(protected_routes.indexOf(router.ActiveLink) > -1)
         {
             // check if user is logged in
@@ -259,7 +258,7 @@
 
                 let contact = new core.Contact(fullName, contactNumber, emailAddress);
                 if(contact.serialize())
-                {
+                { 
                     let key = contact.FullName.substring(0, 1) + Date.now();
 
                     localStorage.setItem(key, contact.serialize() as string);
