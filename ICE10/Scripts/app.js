@@ -60,7 +60,7 @@
         });
     }
     function LoadHeader() {
-        $.get("./Views/components/header.html", function (html_data) {
+        $.get("../Views/components/header.html", function (html_data) {
             $("header").html(html_data);
             AddNavigationEvents();
             CheckLogin();
@@ -69,13 +69,13 @@
     function LoadContent() {
         let page_name = router.ActiveLink;
         let callback = ActiveLinkCallBack();
-        $.get(`./Views/content/${page_name}.html`, function (html_date) {
+        $.get(`../Views/content/${page_name}.html`, function (html_date) {
             $("main").html(html_date);
             callback();
         });
     }
     function LoadFooter() {
-        $.get(`./Views/components/footer.html`, function (html_date) {
+        $.get(`../Views/components/footer.html`, function (html_date) {
             $("footer").html(html_date);
         });
     }
@@ -84,9 +84,9 @@
         $("#AboutUsButton").on("click", () => {
             LoadLink("about");
         });
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
+        $("main").append(`<p id="MainParagraph" class="mt-3">This is my main paragraph for ICE10</p>`);
         $("main").append(`<article>
-        <p id="ArticleParagraph" class ="mt-3">This is the Article Paragraph</p>
+        <p id="ArticleParagraph" class ="mt-3">This is the second Paragraph LOL</p>
         </article>`);
     }
     function DisplayProductsPage() {
@@ -251,7 +251,7 @@
         $("#loginButton").on("click", function () {
             let success = false;
             let newUser = new core.User();
-            $.get("./Data/users.json", function (data) {
+            $.get("../Data/users.json", function (data) {
                 for (const user of data.users) {
                     let username = document.forms[0].username.value;
                     let password = document.forms[0].password.value;
