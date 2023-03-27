@@ -160,9 +160,9 @@
             LoadLink("about");
         });
     
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is my first paragraph for ICE10</p>`);
+        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
         $("main").append(`<article>
-        <p id="ArticleParagraph" class ="mt-3">Basically instead using duplicate modules and duplicate content pages I ref'ed them to the files which where already in the repo! to save memory </p>
+        <p id="ArticleParagraph" class ="mt-3">This is the Article Paragraph</p>
         </article>`);
     }
 
@@ -449,7 +449,7 @@
             let newUser = new core.User();
 
             // uses jQuery shortcut to load the users.json file
-            $.get("../Data/users.json", function(data)
+            $.get("./Data/users.json", function(data)
             {
                 // for every user in the users.json file
                 for (const user of data.users) 
