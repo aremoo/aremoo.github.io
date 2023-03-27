@@ -2,16 +2,14 @@
 var core;
 (function (core) {
     class Contact {
-        constructor(name, contactNumber, emailAddress) {
-            this.m_name = name;
-            this.m_contactNumber = contactNumber;
-            this.m_emailAddress = emailAddress;
+        m_fullName;
+        m_contactNumber;
+        m_emailAddress;
+        get FullName() {
+            return this.m_fullName;
         }
-        get Name() {
-            return this.m_name;
-        }
-        set Name(name) {
-            this.m_name = name;
+        set FullName(fullName) {
+            this.m_fullName = fullName;
         }
         get ContactNumber() {
             return this.m_contactNumber;
@@ -25,20 +23,28 @@ var core;
         set EmailAddress(emailAddress) {
             this.m_emailAddress = emailAddress;
         }
+        constructor(fullName = "", contactNumber = "", emailAddress = "") {
+            this.m_fullName = fullName;
+            this.m_contactNumber = contactNumber;
+            this.m_emailAddress = emailAddress;
+        }
         serialize() {
-            if (this.Name !== "" && this.ContactNumber !== "" && this.EmailAddress !== "")
-                return `${this.Name}, ${this.ContactNumber}, ${this.EmailAddress}`;
-            console.error("One or more properties or fields of the Contact Object are missing or invalid!");
-            return null;
+            if (this.FullName !== "" && this.ContactNumber !== "" && this.EmailAddress !== "") {
+                return `${this.FullName},${this.ContactNumber},${this.EmailAddress}`;
+            }
+            else {
+                console.error("One or more properties of the Contact are missing or empty");
+                return null;
+            }
         }
         deserialize(data) {
             let propertyArray = data.split(",");
-            this.Name = propertyArray[0];
+            this.FullName = propertyArray[0];
             this.ContactNumber = propertyArray[1];
             this.EmailAddress = propertyArray[2];
         }
         toString() {
-            return `Full Name is ${this.Name}\nContact Information is ${this.ContactNumber}\nEmail Address is ${this.EmailAddress}`;
+            return `Full Name     : ${this.FullName}\nContact Number: ${this.ContactNumber}\nEmail Address : ${this.EmailAddress}`;
         }
     }
     core.Contact = Contact;

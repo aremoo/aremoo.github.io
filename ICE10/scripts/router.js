@@ -2,6 +2,9 @@
 var core;
 (function (core) {
     class Router {
+        m_activeLink;
+        m_linkData;
+        m_routingTable;
         get ActiveLink() {
             return this.m_activeLink;
         }
@@ -22,7 +25,7 @@ var core;
         Add(route) {
             this.m_routingTable.push(route);
         }
-        AddRoutingTable(routingTable) {
+        AddTable(routingTable) {
             this.m_routingTable = routingTable;
         }
         Find(route) {
@@ -42,17 +45,18 @@ var core;
     core.Router = Router;
 })(core || (core = {}));
 let router = new core.Router();
-router.AddRoutingTable([
+router.AddTable([
     "/",
     "/home",
     "/about",
     "/services",
     "/contact",
     "/contact-list",
-    "/projects",
+    "/products",
     "/register",
     "/login",
-    "/edit"
+    "/edit",
+    "/task-list"
 ]);
 let route = location.pathname;
 router.ActiveLink = (router.Find(route) > -1) ? (route == "/") ? "home" : route.substring(1) : "404";
