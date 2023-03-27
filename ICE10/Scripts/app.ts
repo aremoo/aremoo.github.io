@@ -160,9 +160,9 @@
             LoadLink("about");
         });
     
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
+        $("main").append(`<p id="MainParagraph" class="mt-3">This is the First paragraph for ICE10</p>`);
         $("main").append(`<article>
-        <p id="ArticleParagraph" class ="mt-3">This is the Article Paragraph</p>
+        <p id="ArticleParagraph" class ="mt-3">This is Secnod paragraph for ICE10 LOL</p>
         </article>`);
     }
 
