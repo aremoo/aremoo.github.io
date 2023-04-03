@@ -297,15 +297,17 @@ Course: WEBD6201
         });
       }
     function RegisterFromValidation(){
+        //making Regex patterns for the fields
         const namePattern = /^[A-Za-z]{2,}$/;
         const emailPattern=/^.{8,}@.*$/;
         const passPattern=/^\S{6,}$/;
+        //validating fields
         ValidateField("FirstName", namePattern, "Please enter a valid First Name (Enter at least 2 chars).");
         ValidateField("lastName", namePattern, "Please enter a valid Last Name (Enter at least 2 chars).");
         ValidateField("emailAddress", emailPattern, "Please enter a valid Email Address. (Emails (users) has to be at least 8 chars).");
         ValidateField("password",passPattern, "Invalid password, password has to be at least 6 chars.");
         ValidateField("confirmPassword",passPattern,"Invalid password, password has to be at least 6 chars.");
-
+        //confirming pass & confirm pass match
         let messageArea = $("#messageArea").hide();
         $("#" + 'confirmPassword').on("blur", function () {
             let password = $('#password').val();
