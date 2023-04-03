@@ -1,25 +1,32 @@
+/*
+Name:Amirreza Moghadam
+Course: WEBD6201
+*/
 "use strict";
 (function () {
-    function AuthGuard() {
-        let protected_routes = [
-            "contact-list",
-            "task-list"
-        ];
-        if (protected_routes.indexOf(router.ActiveLink) > -1) {
-            if (!sessionStorage.getItem("user")) {
-                router.ActiveLink = "login";
-                $("#contact-list").hide();
-                $("#task-list").hide();
-            }
-            else {
-                $("#contact-list").show();
-                $("#task-list").show();
-            }
+    const users = [
+        {
+          DisplayName: "John Smith",
+          EmailAddress: "john.smith@example.com",
+          Username: "johnsmith",
+          Password: "123456"
+        },
+        {
+          DisplayName: "May Smith",
+          EmailAddress: "may.smith@example.com",
+          Username: "maysmith",
+          Password: "123456"
+        },
+        {
+          DisplayName: "Admin",
+          EmailAddress: "admin@example.com",
+          Username: "admin",
+          Password: "123456"
         }
-    }
+      ];
+       
     function LoadLink(link, data = "") {
         router.ActiveLink = link;
-        AuthGuard();
         router.LinkData = data;
         history.pushState({}, "", router.ActiveLink);
         document.title = router.ActiveLink.substring(0, 1).toUpperCase() + router.ActiveLink.substring(1);
@@ -60,7 +67,7 @@
         });
     }
     function LoadHeader() {
-        $.get("../Views/components/header.html", function (html_data) {
+        $.get("./Views/components/header.html", function (html_data) {
             $("header").html(html_data);
             AddNavigationEvents();
             CheckLogin();
@@ -69,13 +76,13 @@
     function LoadContent() {
         let page_name = router.ActiveLink;
         let callback = ActiveLinkCallBack();
-        $.get(`../Views/content/${page_name}.html`, function (html_date) {
+        $.get(`./Views/content/${page_name}.html`, function (html_date) {
             $("main").html(html_date);
             callback();
         });
     }
     function LoadFooter() {
-        $.get(`../Views/components/footer.html`, function (html_date) {
+        $.get(`./Views/components/footer.html`, function (html_date) {
             $("footer").html(html_date);
         });
     }
@@ -84,9 +91,9 @@
         $("#AboutUsButton").on("click", () => {
             LoadLink("about");
         });
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is the First paragraph for ICE10</p>`);
+        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
         $("main").append(`<article>
-        <p id="ArticleParagraph" class ="mt-3">This is Secnod paragraph for ICE10 LOL</p>
+        <p id="ArticleParagraph" class ="mt-3">This is the Article Paragraph</p>
         </article>`);
     }
     function DisplayProductsPage() {
@@ -226,14 +233,18 @@
     }
     function CheckLogin() {
         if (sessionStorage.getItem("user")) {
-            $("#contact-list").show();
-            $("#task-list").show();
+
             $("#login").html(`<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
+            let userT = new core.User(); 
+            userT.deserialize(sessionStorage.getItem("user"));
+            let displayName = userT.DisplayName;
+            $("#user-name").html(`<a id="user-name" class="nav-link" href="#"><i ></i> Hi, ${displayName}</a>`);
             $("#logout").on("click", function () {
                 sessionStorage.clear();
-                $("#contact-list").hide();
-                $("#task-list").hide();
+
                 $("#login").html(`<a class="nav-link" data="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+                $("#user-name").html(`<a id="user-name" class="nav-link" href="#"><i ></i></a>`);
+
                 AddNavigationEvents();
                 LoadLink("login");
             });
@@ -245,41 +256,97 @@
     }
     function DisplayLoginPage() {
         console.log("Login Page");
+      
         let messageArea = $("#messageArea");
         messageArea.hide();
+      
         AddLinkEvents("register");
-        $("#loginButton").on("click", function () {
-            let success = false;
-            let newUser = new core.User();
-            $.get("../Data/users.json", function (data) {
-                for (const user of data.users) {
-                    let username = document.forms[0].username.value;
-                    let password = document.forms[0].password.value;
-                    if (username == user.Username && password == user.Password) {
-                        newUser.fromJSON(user);
-                        success = true;
-                        break;
-                    }
-                }
-                if (success) {
-                    sessionStorage.setItem("user", newUser.serialize());
-                    messageArea.removeAttr("class").hide();
-                    LoadLink("contact-list");
-                }
-                else {
-                    $("#username").trigger("focus").trigger("select");
-                    messageArea.addClass("alert alert-danger").text("Error: Invalid Login Information").show();
-                }
-            });
+      
+        $("#loginButton").on("click", function() {
+          let success = false;
+          let newUser = new core.User();
+      
+          for (const user of users) {
+            let username = document.forms[0].username.value;
+            let password = document.forms[0].password.value;
+      
+            if (username == user.Username && password == user.Password) {
+              newUser.DisplayName = user.DisplayName;
+              newUser.EmailAddress = user.EmailAddress;
+              newUser.Username = user.Username;
+              newUser.Password = user.Password;
+      
+              success = true;
+              break;
+            }
+          }
+      
+          if (success) {
+            sessionStorage.setItem("user", newUser.serialize());
+            messageArea.removeAttr("class").hide();
+            LoadLink("contact");
+          } else {
+            $("#username").trigger("focus").trigger("select");
+            messageArea.addClass("alert alert-danger").text("Error: Invalid Login Information").show();
+          }
         });
-        $("#cancelButton").on("click", function () {
-            document.forms[0].reset();
-            LoadLink("home");
+      
+        $("#cancelButton").on("click", function() {
+          document.forms[0].reset();
+          LoadLink("home");
         });
+      }
+    function RegisterFromValidation(){
+        const namePattern = /^[A-Za-z]{2,}$/;
+        const emailPattern=/^.{8,}@.*$/;
+        const passPattern=/^\S{6,}$/;
+        ValidateField("FirstName", namePattern, "Please enter a valid First Name (Enter at least 2 chars).");
+        ValidateField("lastName", namePattern, "Please enter a valid Last Name (Enter at least 2 chars).");
+        ValidateField("emailAddress", emailPattern, "Please enter a valid Email Address. (Emails (users) has to be at least 8 chars).");
+        ValidateField("password",passPattern, "Invalid password, password has to be at least 6 chars.");
+        ValidateField("confirmPassword",passPattern,"Invalid password, password has to be at least 6 chars.");
+
+        let messageArea = $("#messageArea").hide();
+        $("#" + 'confirmPassword').on("blur", function () {
+            let password = $('#password').val();
+            let confirmPassword = $('#confirmPassword').val();
+            
+            if (password !== confirmPassword) {
+                $(this).trigger("focus").trigger("select");
+                messageArea.addClass("alert alert-danger").text("The confirm password does not match password you entered.").show();
+            }
+            else {
+                messageArea.removeAttr("class").hide();
+            }
+        });
+
     }
+    function AddUser(firstname, lastname, emailaddress, password)
+    {
+        let newUser = new core.User(firstname+" "+lastname,emailaddress, firstname+lastname, password);
+        if(newUser.serialize())
+        {
+            console.log(newUser.toString());
+        }
+    }        
     function DisplayRegisterPage() {
         console.log("Register Page");
         AddLinkEvents("login");
+      
+        let messageArea = $("#messageArea");
+        messageArea.hide();
+      
+        RegisterFromValidation();
+        $("#submitButton").on("click", (event) => {
+            event.preventDefault();
+            let firstname = document.forms[0].firstName.value;
+            let lastname = document.forms[0].lastName.value;
+            let emailAddress = document.forms[0].emailAddress.value;
+            let pass = document.forms[0].password.value;
+            AddUser(firstname, lastname, emailAddress, password);
+        });
+
+
     }
     function Display404Page() {
     }
