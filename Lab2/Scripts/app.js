@@ -6,25 +6,25 @@ Course: WEBD6201
 (function () {
     const users = [
         {
-          DisplayName: "John Smith",
-          EmailAddress: "john.smith@example.com",
-          Username: "johnsmith",
-          Password: "123456"
+            DisplayName: "John Smith",
+            EmailAddress: "john.smith@example.com",
+            Username: "johnsmith",
+            Password: "123456"
         },
         {
-          DisplayName: "May Smith",
-          EmailAddress: "may.smith@example.com",
-          Username: "maysmith",
-          Password: "123456"
+            DisplayName: "May Smith",
+            EmailAddress: "may.smith@example.com",
+            Username: "maysmith",
+            Password: "123456"
         },
         {
-          DisplayName: "Admin",
-          EmailAddress: "admin@example.com",
-          Username: "admin",
-          Password: "123456"
+            DisplayName: "Admin",
+            EmailAddress: "admin@example.com",
+            Username: "admin",
+            Password: "123456"
         }
-      ];
-       
+    ];
+
     function LoadLink(link, data = "") {
         router.ActiveLink = link;
         router.LinkData = data;
@@ -235,7 +235,7 @@ Course: WEBD6201
         if (sessionStorage.getItem("user")) {
 
             $("#login").html(`<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
-            let userT = new core.User(); 
+            let userT = new core.User();
             userT.deserialize(sessionStorage.getItem("user"));
             let displayName = userT.DisplayName;
             $("#user-name").html(`<a id="user-name" class="nav-link" href="#"><i ></i> Hi, ${displayName}</a>`);
@@ -256,61 +256,61 @@ Course: WEBD6201
     }
     function DisplayLoginPage() {
         console.log("Login Page");
-      
+
         let messageArea = $("#messageArea");
         messageArea.hide();
-      
+
         AddLinkEvents("register");
-      
-        $("#loginButton").on("click", function() {
-          let success = false;
-          let newUser = new core.User();
-      
-          for (const user of users) {
-            let username = document.forms[0].username.value;
-            let password = document.forms[0].password.value;
-      
-            if (username == user.Username && password == user.Password) {
-              newUser.DisplayName = user.DisplayName;
-              newUser.EmailAddress = user.EmailAddress;
-              newUser.Username = user.Username;
-              newUser.Password = user.Password;
-      
-              success = true;
-              break;
+
+        $("#loginButton").on("click", function () {
+            let success = false;
+            let newUser = new core.User();
+
+            for (const user of users) {
+                let username = document.forms[0].username.value;
+                let password = document.forms[0].password.value;
+
+                if (username == user.Username && password == user.Password) {
+                    newUser.DisplayName = user.DisplayName;
+                    newUser.EmailAddress = user.EmailAddress;
+                    newUser.Username = user.Username;
+                    newUser.Password = user.Password;
+
+                    success = true;
+                    break;
+                }
             }
-          }
-      
-          if (success) {
-            sessionStorage.setItem("user", newUser.serialize());
-            messageArea.removeAttr("class").hide();
-            LoadLink("contact");
-          } else {
-            $("#username").trigger("focus").trigger("select");
-            messageArea.addClass("alert alert-danger").text("Error: Invalid Login Information").show();
-          }
+
+            if (success) {
+                sessionStorage.setItem("user", newUser.serialize());
+                messageArea.removeAttr("class").hide();
+                LoadLink("contact");
+            } else {
+                $("#username").trigger("focus").trigger("select");
+                messageArea.addClass("alert alert-danger").text("Error: Invalid Login Information").show();
+            }
         });
-      
-        $("#cancelButton").on("click", function() {
-          document.forms[0].reset();
-          LoadLink("home");
+
+        $("#cancelButton").on("click", function () {
+            document.forms[0].reset();
+            LoadLink("home");
         });
-      }
-    function RegisterFromValidation(){
+    }
+    function RegisterFromValidation() {
         const namePattern = /^[A-Za-z]{2,}$/;
-        const emailPattern=/^.{8,}@.*$/;
-        const passPattern=/^\S{6,}$/;
+        const emailPattern = /^.{8,}@.*$/;
+        const passPattern = /^\S{6,}$/;
         ValidateField("FirstName", namePattern, "Please enter a valid First Name (Enter at least 2 chars).");
         ValidateField("lastName", namePattern, "Please enter a valid Last Name (Enter at least 2 chars).");
         ValidateField("emailAddress", emailPattern, "Please enter a valid Email Address. (Emails (users) has to be at least 8 chars).");
-        ValidateField("password",passPattern, "Invalid password, password has to be at least 6 chars.");
-        ValidateField("confirmPassword",passPattern,"Invalid password, password has to be at least 6 chars.");
+        ValidateField("password", passPattern, "Invalid password, password has to be at least 6 chars.");
+        ValidateField("confirmPassword", passPattern, "Invalid password, password has to be at least 6 chars.");
 
         let messageArea = $("#messageArea").hide();
         $("#" + 'confirmPassword').on("blur", function () {
             let password = $('#password').val();
             let confirmPassword = $('#confirmPassword').val();
-            
+
             if (password !== confirmPassword) {
                 $(this).trigger("focus").trigger("select");
                 messageArea.addClass("alert alert-danger").text("The confirm password does not match password you entered.").show();
@@ -321,21 +321,19 @@ Course: WEBD6201
         });
 
     }
-    function AddUser(firstname, lastname, emailaddress, password)
-    {
-        let newUser = new core.User(firstname+" "+lastname,emailaddress, firstname+lastname, password);
-        if(newUser.serialize())
-        {
+    function AddUser(firstname, lastname, emailaddress, password) {
+        let newUser = new core.User(firstname + " " + lastname, emailaddress, firstname + lastname, password);
+        if (newUser.serialize()) {
             console.log(newUser.toString());
         }
-    }        
+    }
     function DisplayRegisterPage() {
         console.log("Register Page");
         AddLinkEvents("login");
-      
+
         let messageArea = $("#messageArea");
         messageArea.hide();
-      
+
         RegisterFromValidation();
         $("#submitButton").on("click", (event) => {
             event.preventDefault();
